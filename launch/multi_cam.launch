@@ -1,0 +1,78 @@
+<launch>
+    <arg name="northwest" value="northwest" />
+    <arg name="southwest" value="southwest" />
+
+    <group ns="northwest">
+        <include file="$(find video_stream_opencv)/launch/camera.launch">
+            <!-- node name and ros graph name -->
+            <arg name="camera_name" value="webcam"/>
+            <!-- means video device 0, /dev/video0 -->
+            <arg name="video_stream_provider"
+                 value="rtsp://admin:HIKVISION7720@192.168.1.63:554/codec/channel/subtype/av_stream"/>
+            <!-- set camera fps to (if the device allows) -->
+            <arg name="set_camera_fps" value="10"/>
+            <!-- set buffer queue size of frame capturing to -->
+            <arg name="buffer_queue_size" value="10"/>
+            <!-- throttling the querying of frames to -->
+            <arg name="fps" value="10"/>
+            <!-- setting frame_id -->
+            <arg name="frame_id" value="webcam"/>
+            <!-- camera info loading, take care as it needs the "file:///" at the start , e.g.:
+            "file:///$(find your_camera_package)/config/your_camera.yaml" -->
+            <arg name="camera_info_url" value="file:///home/cdj/.ros/camera_info/northwest.yaml"/>
+            <!-- flip the image horizontally (mirror it) -->
+            <arg name="flip_horizontal" value="false"/>
+            <!-- flip the image vertically -->
+            <arg name="flip_vertical" value="false"/>
+            <!-- visualize on an image_view window the stream generated -->
+            <arg name="visualize" value="false"/>
+        </include>
+
+        <node ns="/northwest/webcam" name="image_proc" pkg="image_proc" type="image_proc" />
+
+        <remap from="/tf" to="/northwest/tf" />
+        <include file="$(find apriltag_ros)/launch/continuous_detection.launch">
+            <arg name="camera_name" default="/northwest/webcam" />
+            <arg name="camera_frame" default="northwest" />
+            <arg name="image_topic" default="image_rect" />
+        </include>
+
+    </group>
+
+    <group ns="southwest">
+        <include file="$(find video_stream_opencv)/launch/camera.launch">
+            <!-- node name and ros graph name -->
+            <arg name="camera_name" value="webcam"/>
+            <!-- means video device 0, /dev/video0 -->
+            <arg name="video_stream_provider"
+                 value="rtsp://admin:HIKVISION7720@192.168.1.64:554/codec/channel/subtype/av_stream"/>
+            <!-- set camera fps to (if the device allows) -->
+            <arg name="set_camera_fps" value="10"/>
+            <!-- set buffer queue size of frame capturing to -->
+            <arg name="buffer_queue_size" value="10"/>
+            <!-- throttling the querying of frames to -->
+            <arg name="fps" value="10"/>
+            <!-- setting frame_id -->
+            <arg name="frame_id" value="webcam"/>
+            <!-- camera info loading, take care as it needs the "file:///" at the start , e.g.:
+            "file:///$(find your_camera_package)/config/your_camera.yaml" -->
+            <arg name="camera_info_url" value="file:///home/cdj/.ros/camera_info/southwest.yaml"/>
+            <!-- flip the image horizontally (mirror it) -->
+            <arg name="flip_horizontal" value="false"/>
+            <!-- flip the image vertically -->
+            <arg name="flip_vertical" value="false"/>
+            <!-- visualize on an image_view window the stream generated -->
+            <arg name="visualize" value="false"/>
+        </include>
+
+        <node ns="/southwest/webcam" name="image_proc" pkg="image_proc" type="image_proc" />
+
+        <remap from="/tf" to="/southwest/tf" />
+        <include file="$(find apriltag_ros)/launch/continuous_detection.launch">
+            <arg name="camera_name" default="/southwest/webcam" />
+            <arg name="camera_frame" default="southwest" />
+            <arg name="image_topic" default="image_rect" />
+        </include>
+    </group>
+
+</launch>

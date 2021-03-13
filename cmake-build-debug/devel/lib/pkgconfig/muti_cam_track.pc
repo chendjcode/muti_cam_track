@@ -1,0 +1,8 @@
+prefix=/home/cdj/catkin_ws/src/muti_cam_track/cmake-build-debug/devel
+
+Name: muti_cam_track
+Description: Description of muti_cam_track
+Version: 0.0.0
+Cflags: -I/home/cdj/catkin_ws/src/muti_cam_track/cmake-build-debug/devel/include -I/home/cdj/catkin_ws/src/muti_cam_track/include
+Libs: -L${prefix}/lib 
+Requires: actionlib_msgs

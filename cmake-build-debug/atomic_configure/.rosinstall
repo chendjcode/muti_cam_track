@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/cdj/catkin_ws/src/muti_cam_track/cmake-build-debug/devel/setup.sh
